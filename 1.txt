@@ -1,0 +1,25 @@
+1. Object-oriented Principles
+	Encapsulate what varies
+	Favor composition over inheritance
+	Program to interfaces, not implementation
+
+2. Strategy Pattern
+	defines a family of algorithms, encapsulates each one, and makes them interchangeable
+		Strategy lets the algorithm vary independently from clients that use it
+	in my own words
+		you define a superclass(a strategy) of this family of algorithms
+		and hold an instance of this strategy, instead of a specific algorithm, in the class wants to use it
+		then you can assign any of the different algorithms to this strategy
+	(you pull the strategy out as a class, instead of putting an algorithm directly in the class using it,
+		in this way, it's more convenient to change it)
+
+3. Observer Pattern
+	defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically
+		and its dependents can be removed on runtime if necessary
+	one of the most heavily used patterns in JDK
+	in my own words
+		create an Subject Interface, with registerObserver(Observer), removeObserver(Observer), notifyObserver(Observer)
+			and keep a collection of Oberser objects
+			(to do so, you may want an abtract class instead of an Interface)
+		create an Observer Interface, with update()
+
