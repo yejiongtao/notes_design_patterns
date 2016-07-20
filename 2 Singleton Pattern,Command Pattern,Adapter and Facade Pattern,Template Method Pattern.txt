@@ -58,5 +58,27 @@
 		store() is to save the logging
 		and load() is to load the logging and redo the command when system error occurs
 
-3. Adapter and Facade Pattern
+3. Adapter Pattern
+	converts the interface of a class into another interface the clients expect
+		ets classes work together that couldn’t otherwise because of incompatible interfaces
+	in English
+		a client is expecting interface Target, and your Apdaptee does not have the interface required
+		so you create an Adapter keeping an Adaptee via composition, to implement interface Target using Adaptee's methods
+		(if you own the Adaptee, maybe you can just modify it to satisfy the Target interface)
+
+4. Facade Pattern
+	provides a unified interface to a set of interfaces in a subsystem
+		defines a higher-level interface that makes the subsystem simpler and easier to use
+	Principle of Least Knowledge: talk only to your immediate friends
+		instead of c.getD().f()
+			you create a f() in C, and then call c.f()
+		in this way, you only depend on C
+
+5. Template Method Pattern
+	defines the skeleton of an algorithm in a method, deferring some steps to subclasses
+		lets subclasses redefine certain steps of an algorithm without changing the algorithm’s structure.
+	for example, in Android, the logic of life circle of a Activity is set
+		but you can override those methods such as onCreate() to perform your own things
+
+6. 
 
