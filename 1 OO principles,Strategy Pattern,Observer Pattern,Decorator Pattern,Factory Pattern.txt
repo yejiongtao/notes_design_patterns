@@ -1,0 +1,107 @@
+1. Object-oriented Principles
+	Encapsulate what varies
+	Favor composition over inheritance
+	Program to interfaces, not implementation
+	Strive for loosely coupled designs between objects that interact
+	Classes should be open for extension but closed for modification (Decorator Pattern)
+
+2. Strategy Pattern (polymorphism, encapsulation)
+	defines a family of algorithms, encapsulates each one, and makes them interchangeable
+		Strategy lets the algorithm vary independently from clients that use it
+	in English
+		you define a superclass(a strategy) of this family of algorithms
+		and hold an instance of this strategy, instead of a specific algorithm, in the class wants to use it
+		then you can assign any of the different algorithms to this strategy
+	(you pull the strategy out as a class, instead of putting an algorithm directly in the class using it,
+		in this way, it's more convenient to change it)
+
+3. Observer Pattern (loose coupling)
+	defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically
+		and its dependents can be added and removed on runtime if necessary
+	one of the most heavily used patterns in JDK
+	in English
+		create an Subject Interface, with registerObserver(Observer), removeObserver(Observer), notifyObservers()
+			and keep a collection of Oberser objects
+			(to do so, you may want an abtract class instead of an Interface)
+			(NO!! shortcomming of using a class intead of an interface: you cannot subclass the class if you already subclassed another one)
+				this is an important aspect that the java.util.Observable is not useful everytime
+		create an Observer Interface, with update()
+
+	Java's built-in Observer Pattern
+		class java.util.Observable
+			interface java.util.Observer
+		differences from what we implemented above
+			when extending Observable, you do not override any of the methods
+				you call setChanged() first if you want to notify
+					you have to call setChanged first for notifications to work
+					there are also clearChanged(), hasChanged()
+				you call notifyObservers() or notifyObservers(Object) to notify Observers
+					call notifyObservers(Object) to pass an object to the Observers
+					call notifyObservers() to notify the Observers, then the Obersvers will decide on their own whether to pull data from you
+			implements Observer, override update(Observable o, Object arg)
+				arg is null if the Observable called notifyObservers()
+			(do not depend on the order of evaluation of the Observer notifications)
+
+4. Decorator Pattern
+	attaches additional responsibilities to an object dynamically. Decorators provide a flexible alternative to subclassing for extending functionality
+	in English
+		why?
+			if you only use subclassing, and you have may features want to add to the superclass
+				then you will end up with numerous subclasses, because you have so many combinations of features
+			and if you add those features as members
+				if you have a new feature, you have to change the code of the superclass
+			intead, you use the Decorator Pattern
+		what is it?
+			have an abtract superclass named Component
+			the original classes are subclasses of Component
+				represent a feature using an abtract class Decorator, subclassing Component, and hold a reference to another Component
+				and then subclass Decorator to implement specific feature Components
+			you wrap the features to the Component as many times as you want, because Decorator is also Component
+				and then you can recursively accumulate each Component's behavior or member
+	Usage of Decorators in JDK: Java I/O
+		you can write your own decorator class by extending FilterInputStream (which is the superclass of all decorator of inputStream)
+
+5. Factory Pattern
+	encapsulates object creation
+	why?
+		C c;
+		if(..)
+			c = new C1();
+		else
+			c = new C2();
+		// here, actually you're breaking the rules of encapsulism
+		because when you have a new subclass of C, you'll have to change this code,
+			and if you have this code in several places, that will be a pain for maintainence
+	how?
+		put the instantiating code in a delicated Factory class
+		static?
+			pros: there's no point to instantiate a factory class
+			cons: you cannot subclass and override the methods
+			( usually reuse an instance of factory will be a good idea)
+	three kinds of Factory
+		Simple Factory
+			a delicated Factory class
+		Factory Method
+			defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
+			sample
+				class Father{
+					C c;
+					public abstract void createC();
+				}
+				class Son1 extends Father{
+					@Override
+					public void createC(){
+						c = new C1();
+					}
+				}
+				class Son2 extends Father{
+					@Override
+					public void createC(){
+						c = new C2();
+					}
+				}
+		Abstract Factory
+			provides an interface for creating families of related or dependent objects without specifying their concrete classes
+				extends the abstract factory to implement concrete Factory
+
+
