@@ -1,0 +1,14 @@
+1. State Pattern
+	allows an object to alter its behavior when its internal state changes
+		The object will appear to change its class.
+	in English
+		instead of keeping a integer in the class to keep track of the current state
+			and then use switch..case in each method
+		create an abstract class named State, with some abstract methods
+		extend State to implemnet concrete state class
+		then the Context just keep track of the State object and call its method when certain issue happens
+
+2. Proxy Pattern
+
+RMI (Remote Method Invocation)
+	RMI gives us a way to find objects in a remote JVM and allows us to invoke their methods.

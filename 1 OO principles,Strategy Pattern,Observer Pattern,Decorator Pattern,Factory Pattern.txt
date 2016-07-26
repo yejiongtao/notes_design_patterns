@@ -5,6 +5,7 @@
 	Strive for loosely coupled designs between objects that interact
 	Classes should be open for extension but closed for modification (Decorator Pattern)
 	Principle of Least Knowledge: talk only to your immediate friends.
+	A class should have only one reason to change
 
 2. Strategy Pattern (polymorphism, encapsulation)
 	defines a family of algorithms, encapsulates each one, and makes them interchangeable

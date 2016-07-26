@@ -80,5 +80,61 @@
 	for example, in Android, the logic of life circle of a Activity is set
 		but you can override those methods such as onCreate() to perform your own things
 
-6. 
+6. Iterator Pattern
+	provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation
+	so that you can write polymorphic code that works with any collections
+		and method like getObjects() shouldn't exist, instead, you simply return an Iterator
+	iterators in Java
+		java.util.Iterator
+			for any Collections, including array
+		java.util.ListIterator
+			for Lists
+			allows goes backwards via previous()
 
+7. Composite Pattern
+	composes objects into tree structures to represent part-whole hierarchies
+		Composite lets clients treat individual objects and compositions of objects uniformly
+	in English
+		an element of tree can be a composite (with children), or an individual (leaf)
+			but all implements the same interface Component
+			in this way, they can be treated uniformly
+		since a composite and an individual may have different kind of behaviors
+			so in my opinion, you should add two more interfaces, one for composites and one for indivisuals
+		for those shared methods, you can make them behave recursively
+			e.g. for draw(), every indivisual components draw themselves, and every composite components invoke all its children's draw()
+
+	but sometimes you'll need an iterator to iterate across all elements in the tree
+		class CompositeIterator implements Iterator{
+			Stack<Iterator<Component>> mStack = new Stack<>();
+
+			public CompositeIterator(Iterator iterator){	// the iterator of the top-level component
+				mStack.push(iterator);
+			}
+
+			public Object next(){
+				if(hasNext()){
+					Iterator<Component> iterator = stack.peek;
+					Component component = iterator.next();
+
+					stack.push(component.createIterator());		// Component.createIterator() returns NullIterator is component is a leaf
+											// which is a custom kind of Iterator, which returns null for next() and false for hasNext()
+					return component;
+				}else{
+					return null;
+				}
+			}
+
+			public boolean hasNext(){
+				if(stack.empty()){
+					return false;
+				} else {
+					Iterator<Component> iterator = stack.peek();
+					if(!iterator.hasNext()){
+						stack.pop();		// this level is empty, go back to the higher level
+						return hasNext;
+					} else {
+						return true;
+					}
+				}
+			}
+		}
