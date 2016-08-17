@@ -8,7 +8,81 @@
 		extend State to implemnet concrete state class
 		then the Context just keep track of the State object and call its method when certain issue happens
 
-2. Proxy Pattern
+2. RMI (Remote Method Invocation)
+	RMI gives us a way to find objects in a remote JVM and allows us to invoke their methods
+	RMI = Sockets + Object Serialization + Some Utilities
+		The utilities are the rmi registry and the compiler to generate stubs and skeletons.
+	when to use
+		if you own the two java program, and they are supposed to depend on each other, then you can use RMI
+			(dependancy is a big issue, since usually you don't want the client to learn about the design detail of the server)
+			(but web services like REST takes CPU cycles to process the platform-independant data)
+		otherwise you use REST/SOAP, in which way the two programs have no dependancy on each other
+			and if there're firewalls between the client and the server, it's likely the RMI traffic might be blocked
+			HTTP traffic is open on most firewalls
+	how it works
+		the client performs a look up in the server's RMI registry
+		the server returns a stub to the client
+		then the client can call the method in the stub
+		the skeleton calls the real method and returns the result
 
-RMI (Remote Method Invocation)
-	RMI gives us a way to find objects in a remote JVM and allows us to invoke their methods.
+	server side
+		make a remote interface
+			the remote interface defines the methods that a client can call remotely
+				both the Stub and actual service will implement this
+			code
+				public interface MyRemote extends Remote{
+					public String sayHello() throws RemoteException;
+					// make sure the arguments and return type are serializable
+				}
+
+		make a remote implementation
+			implement the interface in the actual service
+			code
+				public class MyRemoteImpl extends UnicastRemoteObject implements MyRemote{	// java.rmi.server.UnicastRemoteObject
+					public MyRemoteImpl() throws RemoteException {
+						super();
+					}		// just need this to throws the exception, because super() throws it
+
+					@Override
+					public String sayHello() throws RemoteException{
+						return "Server says hi!";
+					}
+				}
+
+		generate the stubs and skeletons using rmic
+			command line
+				rmic main.MyRemoteImpl
+
+		start the RMI registry
+			command line
+				rmiregistry
+
+		start the remote service
+			this must be done after rmiregistry is up
+			code
+				MyRemote service = new MyRemoteImpl();
+				Naming.rebind("rmi://localhost/hello", service);
+
+	client side
+		create the same interface
+		look up for the stub
+			code
+				MyRemote hello = (MyRemote) Naming.lookup("rmi://localhost/hello");
+				System.out.println(hello.sayHello());
+	some shit!
+		you need security manager to have access to the remote code
+		http://www.ejbtutorial.com/java-rmi/a-step-by-step-implementation-tutorial-for-java-rmi
+
+3. Proxy Pattern
+	provides a surrogate or placeholder for another object to control access to it
+	in English
+		both the proxy and the real subject implement the same interface, so that the client can treat the proxy just like the real subject
+		the proxy keeps a reference to the subject
+
+	ways that proxies control access
+		a remote proxy controls access to a remote object
+		a virtual proxy controls access to a resource that is expensive to create
+		a protection proxy controls access to a resource based on access rights
+
+
+
